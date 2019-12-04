@@ -8,9 +8,11 @@ from copy import copy
 from functools import reduce
 
 class Wire():
-    def __init__(self, path):
-        self.locs = self.trace_path(path)
     
+    def __init__(self, path):
+        self.marker = {'L':self.left, 'R':self.right, 'U':self.up, 'D':self.down}
+        self.locs = self.trace_path(path)
+        
     def trace_path(self, path):
         x=0
         y=0
@@ -20,23 +22,22 @@ class Wire():
         return locs
     
     def mark(self, x, y, locs, step):
-        if step[0] == 'R':
-            for i in range(int(step[1:])):
-                x += 1
-                locs.append((x,y))
-        elif step[0] == 'L':
-            for i in range(int(step[1:])):
-                x -= 1
-                locs.append((x,y))
-        elif step[0] == 'U':
-            for i in range(int(step[1:])):
-                y += 1
-                locs.append((x,y))
-        elif step[0] == 'D':
-            for i in range(int(step[1:])):
-                y -= 1
-                locs.append((x,y))
+        for i in range(int(step[1:])):
+            x, y = self.marker[step[0]](x,y)
+            locs.append((x,y))
         return x, y, locs
+    
+    def right(self, x, y):
+        return x+1, y
+    
+    def left(self, x, y):
+        return x-1, y
+    
+    def up(self, x, y):
+        return x, y+1
+    
+    def down(self, x, y):
+        return x, y-1
 
 class Grid():
     def __init__(self, wires):
