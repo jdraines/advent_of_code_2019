@@ -20,6 +20,7 @@ class Module:
     
     def calculate_fuel(self, mass):
         return int(((mass / 3) // 1 ) - 2)
+
     
 class Spacecraft:
     def __init__(self):
