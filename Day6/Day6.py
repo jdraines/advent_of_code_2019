@@ -193,21 +193,6 @@ class SystemMap:
 with open('day6in.txt', 'rt') as day6_input:
     local_orbits = day6_input.read()
 
-example="""COM)B
-B)C
-C)D
-D)E
-E)F
-B)G
-G)H
-D)I
-E)J
-J)K
-K)L
-K)YOU
-I)SAN"""
-
-
 Map = SystemMap(local_orbits)
 Map.count_orbits(Map.objects)
 print("Length: ", len( Map.shortest_path('YOU', 'SAN', to_screen=True)))
