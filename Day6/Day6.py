@@ -20,7 +20,7 @@ class SystemMap:
         self._map_outward()
         self._get_leaves()
     
-        if fullmap == True:
+        if fullmap:
             self.fullmap()
     
     def fullmap(self):
