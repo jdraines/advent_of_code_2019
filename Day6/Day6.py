@@ -75,8 +75,7 @@ class SystemMap:
                 self.ObjectRelations[obj]['children'] = None
             if self.ObjectRelations[obj]['descendants']== set():
                 self.ObjectRelations[obj]['descendants'] = None
-            
-    
+             
     def shortest_path(self, A, B, to_screen=False):
         if to_screen:
             print("Shortest path from", A, "to", B, ":")
@@ -99,16 +98,14 @@ class SystemMap:
                 set_to_parent.add(parent)
                 steps_to_parent.append(parent)
                 parent = self.ObjectRelations[parent]['parent']
-        
-        #Find the path to B from the parent
+
         set_to_B = set()
         steps_to_B = []
         atB = False
         children = self.ObjectRelations[parent]['children']
-        
-        
-        
-        # Find the child whose children/descendants include B
+
+        # Find the path to B from the parent by finding the child whose children/descendants include B
+        # Also, record the steps.
         while atB == False :
             for child in children :
                 if B in self.ObjectRelations[child]['children']:
@@ -132,8 +129,7 @@ class SystemMap:
         
         shortest_path = steps_to_parent + steps_to_B
         return shortest_path
-        
-    
+         
     def count_orbits(self, object_list):
         dir_desc_count = 0
         ind_desc_count = 0
