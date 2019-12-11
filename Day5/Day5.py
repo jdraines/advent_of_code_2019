@@ -1,7 +1,7 @@
 """
 John Raines
 Advent of Code
-Day 2
+Day 5
 """
 from sys import exit
 from copy import copy
