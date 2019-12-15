@@ -3,8 +3,7 @@ John Raines
 Advent of Code
 Day 7
 """
-from copy import copy, deepcopy
-from ast import literal_eval
+from copy import copy
 from itertools import permutations
 with open('advent_path.txt') as advent:
     advent_path = advent.read()
