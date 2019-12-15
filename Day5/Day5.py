@@ -9,7 +9,7 @@ from ast import literal_eval
 
 class IntcodeComputer():
     """Version 2.0"""
-    def __init__(self, prog):
+    def __init__(self, prog, input_num):
         self.memory_zero = copy(prog)
         self.memory_last = copy(self.memory_zero)
         self.p = 0 # instruction pointer
@@ -28,7 +28,7 @@ class IntcodeComputer():
             0 : self.position_mode,
             1 : self.immediate_mode  # immediate mode
             }
-        self.input_id = input("Enter ID of system to test: ")
+        self.input_id = input_num
         self.run_program()
         if self.memory_last is not None :
             self.output = self.memory_last[0] 
@@ -157,8 +157,10 @@ class IntcodeComputer():
         return cls(prog_copy)
 
 
-with open("day5in.txt", "rt") as puzzin:
-    test_program = [int(x.strip()) for x in puzzin.read().split(',')]
+if __name__ == '__main__':
 
-
-TEST = IntcodeComputer(test_program)
+    with open("day5in.txt", "rt") as puzzin:
+        test_program = [int(x.strip()) for x in puzzin.read().split(',')]
+    
+    
+    TEST = IntcodeComputer(test_program, 5)
