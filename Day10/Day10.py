@@ -88,7 +88,6 @@ class AsteroidField():
     
     def detection_field(self):
         rows_map = self.ast_map.split('\n')
-        print(rows_map)
         detection_field = ""
         for i, row in enumerate(rows_map):
             for j, loc in enumerate(row):
@@ -127,10 +126,9 @@ class AsteroidField():
         for loc, theta in pop_dict.items():
             if theta == atheta:
                 roids_dist[loc] = station.detected_lengths[loc]
-                # print(theta, loc, station.detected_lengths[loc])
 
         sorted_roids = {k: v for k, v in sorted(roids_dist.items(), key=lambda item: item[1])}
-        sorted_keys = [x for x in sorted_roids.keys()]
+        sorted_keys = list(sorted_roids.keys())
         return sorted_keys[0]
         
     def _return_key(self, adict, avalue):
