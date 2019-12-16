@@ -17,9 +17,10 @@ class Asteroid():
         self.detected_lengths = {}
     
     def detect_asteroids(self, asteroid_dict):
-        '''For each asteroid: identify the location of every other asteroid in
-        polar coordinates. Thetas are stored in self.detected_thetas, and 
-        radius lengths are stored in self.detected_lengths. Number of unique
+        '''Identify the location of every other asteroid in polar coordinates.
+        
+        Takes a dict of loc: asteroid. Thetas are stored in self.detected_thetas, 
+        and radius lengths are stored in self.detected_lengths. Number of unique
         thetas is stored in self.detects.'''
         
         thetas = set()
