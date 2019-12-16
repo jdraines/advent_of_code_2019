@@ -10,6 +10,7 @@ from copy import deepcopy
 
 class Asteroid():
     def __init__(self, coords=None):
+        """Create an asteroid. Takes a coordinate-pair tuple."""
         self.coords = coords
         self.detects = None
         self.detected_thetas = {}
@@ -25,9 +26,11 @@ class Asteroid():
         asteroids = {loc: b for loc, b in asteroid_dict.items() if loc != self.coords}
 
         for loc, asteroid in asteroids.items():
+            # Translate all locs so that self.coords functions as origin
             x = loc[0] - self.coords[0]
-            y = self.coords[1] - loc[1] # invert the y-delta calc b/c of the system used by the map
+            y = self.coords[1] - loc[1] # invert y calc b/c of the system used by the map
             
+            # Calculate theta depending on the quadrant, with zero-handling
             if (x==0) and (y>0):
                 theta = 0
             elif (x>=0) and (y>0):
@@ -48,8 +51,10 @@ class Asteroid():
                 theta1 = np.arctan((y/x))
                 theta = abs(theta1) + 270
             else:
+                # in case we messed up
                 print("Didn't account for:")
                 print("x",x, "y",y)
+                sys.exit()
             thetas.add(theta)
             self.detected_thetas[loc] = theta
             self.detected_lengths[loc] = np.sqrt(x**2 + y**2)
@@ -57,6 +62,7 @@ class Asteroid():
 
 class AsteroidField():
     def __init__(self, ast_map):
+        """Create field of asteroids: takes a string map like the examples."""
         # Define
         self.ast_map = ast_map
         self.asteroids = {}
@@ -67,6 +73,11 @@ class AsteroidField():
         self.chart_asteroids()
         
     def chart_asteroids(self):
+        """Chart the asteroid locations.
+        
+        Fills self.asteroids with key = location of asteroid and 
+        value = new Asteroid() obj with that location as arg
+        """
         rows_map = self.ast_map.split('\n')
         for i, row in enumerate(rows_map):
             for j, loc in enumerate(row):
@@ -74,19 +85,22 @@ class AsteroidField():
                     self.asteroids[(i,j)] = Asteroid((i,j))
                     
     def set_detection_counts(self):
-        if self.asteroids is None:
-            self.chart_asteroids()
+        """For each asteroid, detect as many asteroids as possible.
+        
+        Calls the `detect_asteroids()` method on each asteroid. Provide
+        self.asteroids as the dict of asteroids to detect.
+        """
         loc_detect = {}
         for loc, asteroid in self.asteroids.items():
             asteroid.detect_asteroids(self.asteroids)
             loc_detect[loc] = asteroid.detects
-
+        
+        # Find the asteroid which detects the most number of asteroids. Set as station.
         highest_detected = max(loc_detect.values())
-        for loc, detected in loc_detect.items():
-            if detected == highest_detected:
-                self.station = loc
+        self.station = self._return_key(loc_detect, highest_detected)
     
     def detection_field(self):
+        """Create a detection field like the one shown in examples, for debugging."""
         rows_map = self.ast_map.split('\n')
         detection_field = ""
         for i, row in enumerate(rows_map):
@@ -99,6 +113,13 @@ class AsteroidField():
         return detection_field
                     
     def laserize(self):
+        """Create a list of asteroid locations in the order they'll be destroyed.
+        
+        Cycle through the unique thetas, append the location of the nearest 
+        instance of an asteroid with that theta to the destruction list. Pop 
+        that location from a deepcopy list of asteroids. Continue until all
+        asteroids have been laserized.
+        """
         station = self.asteroids[self.station]
         remaining_thetas = deepcopy(station.detected_thetas)
         slotted_for_destruction = []
