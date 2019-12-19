@@ -35,8 +35,7 @@ class EHPR():
             self.run_the_comp(color)
     
     def paint(self):
-        if self.Computer.output:
-            self.hullspace[self.loc] = self.Computer.output[0]
+        self.hullspace[self.loc] = self.Computer.output[0]
     
     def turn(self):
         # print("output", self.Computer.output)
