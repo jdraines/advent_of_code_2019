@@ -38,6 +38,7 @@ class EHPR():
         self.hullspace[self.loc] = self.Computer.output[0]
     
     def turn(self):
+        # Track and update orientation in degrees 0 to 360
         k = (self.Computer.output[1] - 0.5) * 2
         self.facing += k*90
         if self.facing >= 360 :
@@ -46,6 +47,7 @@ class EHPR():
             self.facing += 360
         
     def move(self):
+        # Update x and y by trig functions
         x = self.loc[0] + int(round(np.cos(np.radians(self.facing)),0))
         y = self.loc[1] + int(round(np.sin(np.radians(self.facing)),0))
         self.loc = (x,y)
@@ -54,12 +56,14 @@ class EHPR():
         self.color = self.hullspace.get(self.loc, 0)
 
     def computer_switcher(self, output):
+        # The robot's output_switch function to provide to the IntcodeComputer
         if len(output) == 2:
             return True
         else:
             return False
     
     def run_the_comp(self):
+        # Run the Computer without resetting the memory
         self.Computer.input_id = self.color
         self.Computer.run_program()
         
@@ -71,7 +75,8 @@ class EHPR():
             ys.append(key[0])
             xs.append(key[1])
             colors.append(value)
-            
+        
+        # Shift all locations to be non-negative
         ya = np.array(ys)
         xa = np.array(xs)
         
