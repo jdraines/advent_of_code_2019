@@ -83,11 +83,8 @@ class EHPR():
         xa = np.array([int(round(x,0)) for x in xa])
         grid = np.zeros((np.max(ya)+1, np.max(xa)+1))
         for i, x in enumerate(ys):
-            try:
-                grid[ya[i], xa[i]] = colors[i]
-            except:
-                print(key)
-                raise
+            grid[ya[i], xa[i]] = colors[i]
+            
         plt.imshow(grid)
         
     
