@@ -8,12 +8,22 @@ from copy import copy
 import sys
 
 class IntcodeComputer():
-    """Version 3.0, Now BOOST Certified!"""
-    def __init__(self, prog, input_num=None):
+    """Version 3.1, Now BOOST Certified!"""
+    def __init__(self, prog, input_num=None, output_mode=0, output_switch=None):
         self.memory_zero = copy(prog)
         self.memory_last = copy(self.memory_zero)
         self.p = 0 # instruction pointer
         self.rb = 0 # relative base
+        if output_switch is None:
+            self.output_switch = lambda x: False
+        else:
+            self.output_switch = output_switch
+        self.output_control = {
+            0:self.print,
+            1:self.store_out
+            }
+        self.output = []
+        self.output_mode = output_mode
         self.instruction = {
               1: (3, self.one), # add 1 & 2, then store to 3
               2: (3, self.two), # multiply 1 & 2 then store to 3
@@ -34,24 +44,26 @@ class IntcodeComputer():
         self.input_id = input_num
         self.run_program()
         if self.memory_last is not None :
-            self.output = self.memory_last[0] 
+            self.result = self.memory_last[0] 
         else:
-            self.output = None
+            self.result = None
     
     def run_program(self):
         mem = copy(self.memory_last)
-        #mem.extend([0]*1000)
         halt = None
-        while not halt:
+        switch_out = False
+        self.output = []
+        while (not halt) and (not switch_out):
             try:
                 opcode = self.get_opcode(str(mem[self.p]))
                 parameter_modes = self.get_param_modes(str(mem[self.p]), opcode)
                 values = self.get_values(mem, self.p, opcode, parameter_modes)
                 halt = self.instruction[opcode][1](mem, opcode, *values)
+                switch_out = self.output_switch(self.output)
             except IndexError:
                 if len(mem) < 10**6:
                     mem.extend([0]*1000)
-                    print("(extended memory)")
+                    # print("(extended memory)")
                 else:
                     print("Length size is already 10^6. Raise ceiling?")
                     sys.exit()
@@ -76,7 +88,7 @@ class IntcodeComputer():
 
     def four(self, mem, opcode, b):
         '''output 1'''
-        print("Out:", mem[b])
+        self.output_control[self.output_mode](mem[b])
         self.store(mem)
         self.update_p(opcode)
         
@@ -169,6 +181,12 @@ class IntcodeComputer():
     
     def update_p(self, opcode):
         self.p += self.instruction[opcode][0] + 1
+    
+    def print(self, value):
+        print("output:", value)
+    
+    def store_out(self, value):
+        self.output.append(value)
     
     @classmethod
     def set_state(cls, prog, noun, verb):
