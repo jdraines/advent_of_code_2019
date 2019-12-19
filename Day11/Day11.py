@@ -23,7 +23,7 @@ class EHPR():
         self.facing = 0
         self.Computer = None
         self.hullspace = {}
-        self.colors = {0:'.', 1:'#'}
+        self.color = 0
     
     def go(self):
         self.Computer = IntcodeComputer(self.prog, input_num=1, output_mode=1, output_switch=self.computer_switcher)
@@ -31,8 +31,8 @@ class EHPR():
             self.paint()
             self.turn()
             self.move()
-            color = self.look()
-            self.run_the_comp(color)
+            self.look()
+            self.run_the_comp()
     
     def paint(self):
         self.hullspace[self.loc] = self.Computer.output[0]
@@ -51,7 +51,7 @@ class EHPR():
         self.loc = (x,y)
 
     def look(self):
-        return self.hullspace.get(self.loc, 0)
+        self.color = self.hullspace.get(self.loc, 0)
 
     def computer_switcher(self, output):
         if len(output) == 2:
@@ -59,8 +59,8 @@ class EHPR():
         else:
             return False
     
-    def run_the_comp(self, color):
-        self.Computer.input_id = color
+    def run_the_comp(self):
+        self.Computer.input_id = self.color
         self.Computer.run_program()
         
     def view_the_result(self):
