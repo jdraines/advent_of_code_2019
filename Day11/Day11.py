@@ -64,27 +64,27 @@ class EHPR():
         self.Computer.run_program()
         
     def view_the_result(self):
-        xs = []
         ys = []
+        xs = []
         colors = []
         for key, value in self.hullspace.items():
-            xs.append(key[0])
-            ys.append(key[1])
+            ys.append(key[0])
+            xs.append(key[1])
             colors.append(value)
             
-        xa = np.array(xs)
         ya = np.array(ys)
-        
-        xa = xa - np.min(xa)
-        # Handle the Top > Bottom ascending orientation of imshow()
-        xa = [x+ (-2*(x - int(round(np.mean(xa),0)))) for x in xa ] 
+        xa = np.array(xs)
         
         ya = ya - np.min(ya)
-        ya = np.array([int(round(x,0)) for x in ya])
-        grid = np.zeros((np.max(xa)+1, np.max(ya)+1))
-        for i, x in enumerate(xs):
+        # Handle the Top > Bottom ascending orientation of imshow()
+        ya = [y+ (-2*(y - int(round(np.mean(ya),0)))) for y in ya ] 
+        
+        xa = xa - np.min(xa)
+        xa = np.array([int(round(x,0)) for x in xa])
+        grid = np.zeros((np.max(ya)+1, np.max(xa)+1))
+        for i, x in enumerate(ys):
             try:
-                grid[xa[i], ya[i]] = colors[i]
+                grid[ya[i], xa[i]] = colors[i]
             except:
                 print(key)
                 raise
