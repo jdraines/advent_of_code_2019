@@ -38,7 +38,6 @@ class EHPR():
         self.hullspace[self.loc] = self.Computer.output[0]
     
     def turn(self):
-        # print("output", self.Computer.output)
         k = (self.Computer.output[1] - 0.5) * 2
         self.facing += k*90
         if self.facing >= 360 :
@@ -55,7 +54,6 @@ class EHPR():
         return self.hullspace.get(self.loc, 0)
 
     def computer_switcher(self, output):
-        # print("switch output", output)
         if len(output) == 2:
             return True
         else:
