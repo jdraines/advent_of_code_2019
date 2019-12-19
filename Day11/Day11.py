@@ -17,6 +17,7 @@ from Day09.Day9 import IntcodeComputer
 # We need a RegistrationID
 
 class EHPR():
+    """Emergency Hull Painting Robot"""
     def __init__(self, prog):
         self.prog = copy(prog)
         self.loc = (0,0)
