@@ -87,11 +87,13 @@ class EHPR():
             
         plt.imshow(grid)
         
+
+if __name__ == '__main__':
     
-with open('day11in.txt', 'rt') as day11in:
-    program = [int(x.strip()) for x in day11in.read().split(',')]
-    
-robot = EHPR(program)
-robot.go()
-print(len(robot.hullspace.keys()))
-robot.view_the_result()
+    with open('day11in.txt', 'rt') as day11in:
+        program = [int(x.strip()) for x in day11in.read().split(',')]
+        
+    robot = EHPR(program)
+    robot.go()
+    print(len(robot.hullspace.keys()))
+    robot.view_the_result()
